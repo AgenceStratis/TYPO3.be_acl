@@ -1,0 +1,7 @@
+module.tx_beuser {
+    view {
+        templateRootPath = EXT:be_acl/Resources/Private/Templates/
+        partialRootPath = EXT:be_acl/Resources/Private/Layouts/
+        layoutRootPath = EXT:be_acl/Resources/Private/Partials/
+    }
+}
