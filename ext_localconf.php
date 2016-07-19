@@ -11,7 +11,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_userauthgroup.php']
 
 
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects']['TYPO3\\CMS\\Beuser\\Controller\\PermissionController'] = array(
-	'className' => 'KayStrobach\\BeAcl\\Xclass\\CustomPermissionController',
+	'className' => 'KayStrobach\BeAcl\Xclass\PermissionController',
 );
 
 

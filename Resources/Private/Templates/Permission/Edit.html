@@ -11,6 +11,8 @@
 </f:section>
 
 <f:section name="content">
+	<script src="../../../{extRelPath}res/acl.js" type="text/javascript"></script>
+
 	<f:form action="update" name="editform">
 
 		<div class="form-group">
@@ -41,38 +43,88 @@
 							<th><f:translate key="LLL:EXT:beuser/Resources/Private/Language/locallang_mod_permission.xlf:2" /></th>
 							<th><f:translate key="LLL:EXT:beuser/Resources/Private/Language/locallang_mod_permission.xlf:4" /></th>
 							<th><f:translate key="LLL:EXT:beuser/Resources/Private/Language/locallang_mod_permission.xlf:8" /></th>
+							<f:if condition="{perms_acls}">
+								<th>{f:translate(key: 'LLL:EXT:be_acl/res/locallang_perm.xml:recursiveAcl')}</th>
+								<th></th>
+							</f:if>
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td><strong><f:translate key="LLL:EXT:beuser/Resources/Private/Language/locallang_mod_permission.xlf:Owner" /></strong></td>
-							<td><input type="checkbox" name="check[perms_user][1]" onclick="TYPO3.Permissions.checkChange('check[perms_user]', 'tx_beuser_system_beusertxpermission[data][pages][{id}][perms_user]')" /></td>
-							<td><input type="checkbox" name="check[perms_user][5]" onclick="TYPO3.Permissions.checkChange('check[perms_user]', 'tx_beuser_system_beusertxpermission[data][pages][{id}][perms_user]')" /></td>
-							<td><input type="checkbox" name="check[perms_user][2]" onclick="TYPO3.Permissions.checkChange('check[perms_user]', 'tx_beuser_system_beusertxpermission[data][pages][{id}][perms_user]')" /></td>
-							<td><input type="checkbox" name="check[perms_user][3]" onclick="TYPO3.Permissions.checkChange('check[perms_user]', 'tx_beuser_system_beusertxpermission[data][pages][{id}][perms_user]')" /></td>
-							<td><input type="checkbox" name="check[perms_user][4]" onclick="TYPO3.Permissions.checkChange('check[perms_user]', 'tx_beuser_system_beusertxpermission[data][pages][{id}][perms_user]')" /></td>
-						</tr>
-						<tr>
-							<td><strong><f:translate key="LLL:EXT:beuser/Resources/Private/Language/locallang_mod_permission.xlf:Group" /></strong></td>
-							<td><input type="checkbox" name="check[perms_group][1]" onclick="TYPO3.Permissions.checkChange('check[perms_group]', 'tx_beuser_system_beusertxpermission[data][pages][{id}][perms_group]')" /></td>
-							<td><input type="checkbox" name="check[perms_group][5]" onclick="TYPO3.Permissions.checkChange('check[perms_group]', 'tx_beuser_system_beusertxpermission[data][pages][{id}][perms_group]')" /></td>
-							<td><input type="checkbox" name="check[perms_group][2]" onclick="TYPO3.Permissions.checkChange('check[perms_group]', 'tx_beuser_system_beusertxpermission[data][pages][{id}][perms_group]')" /></td>
-							<td><input type="checkbox" name="check[perms_group][3]" onclick="TYPO3.Permissions.checkChange('check[perms_group]', 'tx_beuser_system_beusertxpermission[data][pages][{id}][perms_group]')" /></td>
-							<td><input type="checkbox" name="check[perms_group][4]" onclick="TYPO3.Permissions.checkChange('check[perms_group]', 'tx_beuser_system_beusertxpermission[data][pages][{id}][perms_group]')" /></td>
-						</tr>
-						<tr>
-							<td><strong><f:translate key="LLL:EXT:beuser/Resources/Private/Language/locallang_mod_permission.xlf:Everybody" /></strong></td>
-							<td><input type="checkbox" name="check[perms_everybody][1]" onclick="TYPO3.Permissions.checkChange('check[perms_everybody]', 'tx_beuser_system_beusertxpermission[data][pages][{id}][perms_everybody]')" /></td>
-							<td><input type="checkbox" name="check[perms_everybody][5]" onclick="TYPO3.Permissions.checkChange('check[perms_everybody]', 'tx_beuser_system_beusertxpermission[data][pages][{id}][perms_everybody]')" /></td>
-							<td><input type="checkbox" name="check[perms_everybody][2]" onclick="TYPO3.Permissions.checkChange('check[perms_everybody]', 'tx_beuser_system_beusertxpermission[data][pages][{id}][perms_everybody]')" /></td>
-							<td><input type="checkbox" name="check[perms_everybody][3]" onclick="TYPO3.Permissions.checkChange('check[perms_everybody]', 'tx_beuser_system_beusertxpermission[data][pages][{id}][perms_everybody]')" /></td>
-							<td><input type="checkbox" name="check[perms_everybody][4]" onclick="TYPO3.Permissions.checkChange('check[perms_everybody]', 'tx_beuser_system_beusertxpermission[data][pages][{id}][perms_everybody]')" /></td>
-						</tr>
+						<f:if condition="{disableOldPermissionSystem}">
+							<f:then></f:then>
+							<f:else>
+								<tr>
+									<td><strong><f:translate key="LLL:EXT:beuser/Resources/Private/Language/locallang_mod_permission.xlf:Owner" /></strong></td>
+									<td><input type="checkbox" name="check[perms_user][1]" onclick="TYPO3.Permissions.checkChange('check[perms_user]', 'tx_beuser_system_beusertxpermission[data][pages][{id}][perms_user]')" /></td>
+									<td><input type="checkbox" name="check[perms_user][5]" onclick="TYPO3.Permissions.checkChange('check[perms_user]', 'tx_beuser_system_beusertxpermission[data][pages][{id}][perms_user]')" /></td>
+									<td><input type="checkbox" name="check[perms_user][2]" onclick="TYPO3.Permissions.checkChange('check[perms_user]', 'tx_beuser_system_beusertxpermission[data][pages][{id}][perms_user]')" /></td>
+									<td><input type="checkbox" name="check[perms_user][3]" onclick="TYPO3.Permissions.checkChange('check[perms_user]', 'tx_beuser_system_beusertxpermission[data][pages][{id}][perms_user]')" /></td>
+									<td><input type="checkbox" name="check[perms_user][4]" onclick="TYPO3.Permissions.checkChange('check[perms_user]', 'tx_beuser_system_beusertxpermission[data][pages][{id}][perms_user]')" /></td>
+									<f:if condition="{perms_acls}">
+										<td></td>
+										<td></td>
+									</f:if>
+								</tr>
+								<tr>
+									<td><strong><f:translate key="LLL:EXT:beuser/Resources/Private/Language/locallang_mod_permission.xlf:Group" /></strong></td>
+									<td><input type="checkbox" name="check[perms_group][1]" onclick="TYPO3.Permissions.checkChange('check[perms_group]', 'tx_beuser_system_beusertxpermission[data][pages][{id}][perms_group]')" /></td>
+									<td><input type="checkbox" name="check[perms_group][5]" onclick="TYPO3.Permissions.checkChange('check[perms_group]', 'tx_beuser_system_beusertxpermission[data][pages][{id}][perms_group]')" /></td>
+									<td><input type="checkbox" name="check[perms_group][2]" onclick="TYPO3.Permissions.checkChange('check[perms_group]', 'tx_beuser_system_beusertxpermission[data][pages][{id}][perms_group]')" /></td>
+									<td><input type="checkbox" name="check[perms_group][3]" onclick="TYPO3.Permissions.checkChange('check[perms_group]', 'tx_beuser_system_beusertxpermission[data][pages][{id}][perms_group]')" /></td>
+									<td><input type="checkbox" name="check[perms_group][4]" onclick="TYPO3.Permissions.checkChange('check[perms_group]', 'tx_beuser_system_beusertxpermission[data][pages][{id}][perms_group]')" /></td>
+									<f:if condition="{perms_acls}">
+										<td></td>
+										<td></td>
+									</f:if>
+								</tr>
+								<tr>
+									<td><strong><f:translate key="LLL:EXT:beuser/Resources/Private/Language/locallang_mod_permission.xlf:Everybody" /></strong></td>
+									<td><input type="checkbox" name="check[perms_everybody][1]" onclick="TYPO3.Permissions.checkChange('check[perms_everybody]', 'tx_beuser_system_beusertxpermission[data][pages][{id}][perms_everybody]')" /></td>
+									<td><input type="checkbox" name="check[perms_everybody][5]" onclick="TYPO3.Permissions.checkChange('check[perms_everybody]', 'tx_beuser_system_beusertxpermission[data][pages][{id}][perms_everybody]')" /></td>
+									<td><input type="checkbox" name="check[perms_everybody][2]" onclick="TYPO3.Permissions.checkChange('check[perms_everybody]', 'tx_beuser_system_beusertxpermission[data][pages][{id}][perms_everybody]')" /></td>
+									<td><input type="checkbox" name="check[perms_everybody][3]" onclick="TYPO3.Permissions.checkChange('check[perms_everybody]', 'tx_beuser_system_beusertxpermission[data][pages][{id}][perms_everybody]')" /></td>
+									<td><input type="checkbox" name="check[perms_everybody][4]" onclick="TYPO3.Permissions.checkChange('check[perms_everybody]', 'tx_beuser_system_beusertxpermission[data][pages][{id}][perms_everybody]')" /></td>
+									<f:if condition="{perms_acls}">
+										<td></td>
+										<td></td>
+									</f:if>
+								</tr>
+							</f:else>
+						</f:if>
+
+						<f:if condition="{perms_acls}">
+                            <f:for each="{perms_acls}" as="perm_acl">
+                                <tr>
+                                    <td>
+                                        <f:form.select name="data[tx_beacl_acl][{perm_acl.uid}][type]" options="{0: 'User', 1: 'Group'}" value="1" />
+                                        <f:form.select name="data[tx_beacl_acl][{perm_acl.uid}][object_id]" options="{beGroupData}" value="{currentBeGroup}" />
+                                    </td>
+                                    <td><input type="checkbox" name="check[perms_acl_{perm_acl.uid}][1]" onclick="TYPO3.Permissions.checkChange('check[perms_acl_{perm_acl.uid}]', 'tx_beuser_system_beusertxpermission[data][tx_beacl_acl][{perm_acl.uid}][permissions]')" /></td>
+                                    <td><input type="checkbox" name="check[perms_acl_{perm_acl.uid}][5]" onclick="TYPO3.Permissions.checkChange('check[perms_acl_{perm_acl.uid}]', 'tx_beuser_system_beusertxpermission[data][tx_beacl_acl][{perm_acl.uid}][permissions]')" /></td>
+                                    <td><input type="checkbox" name="check[perms_acl_{perm_acl.uid}][2]" onclick="TYPO3.Permissions.checkChange('check[perms_acl_{perm_acl.uid}]', 'tx_beuser_system_beusertxpermission[data][tx_beacl_acl][{perm_acl.uid}][permissions]')" /></td>
+                                    <td><input type="checkbox" name="check[perms_acl_{perm_acl.uid}][3]" onclick="TYPO3.Permissions.checkChange('check[perms_acl_{perm_acl.uid}]', 'tx_beuser_system_beusertxpermission[data][tx_beacl_acl][{perm_acl.uid}][permissions]')" /></td>
+                                    <td><input type="checkbox" name="check[perms_acl_{perm_acl.uid}][4]" onclick="TYPO3.Permissions.checkChange('check[perms_acl_{perm_acl.uid}]', 'tx_beuser_system_beusertxpermission[data][tx_beacl_acl][{perm_acl.uid}][permissions]')" /></td>
+                                    <td>
+                                        <input type="hidden" name="data[tx_beacl_acl][{perm_acl.uid}][recursive]" value="0" />
+                                        <input type="checkbox" name="data[tx_beacl_acl][{perm_acl.uid}][recursive]" value="1" {f:if(condition: '{perm_acl.recursive}', then: 'checked', else: '')} />
+                                    </td>
+                                    <td>
+                                        <a href="javascript:deleteACL(1)"><core:icon identifier="actions-delete" /> {f:translate(key: 'LLL:EXT:be_acl/res/locallang_perm.xml:deleteAcl')}</a>
+                                    </td>
+                                </tr>
+                            </f:for>
+						</f:if>
 					</tbody>
 				</table>
 			</div>
 		</div>
-
+		<div class="form-group">
+			<span id="templateDeleteImage" style="display: none">
+				<core:icon identifier="actions-delete" />
+			</span>
+			<span id="insertHiddenFields"></span>
+			<a href="javascript:addACL()"><core:icon identifier="actions-document-new" /> {f:translate(key: 'LLL:EXT:be_acl/res/locallang_perm.xml:addAcl')}</a>
+		</div>
 		<div class="form-group">
 			<label for="recursionLevel"><f:translate key="LLL:EXT:beuser/Resources/Private/Language/locallang_mod_permission.xlf:Depth" /></label>
 			<f:form.select id="recursionLevel" name="mirror[pages][{id}]" options="{recursiveSelectOptions}" class="form-control" />
@@ -84,9 +136,12 @@
 		<f:form.hidden name="data[pages][{id}][perms_user]" value="{pageInfo.perms_user}" />
 		<f:form.hidden name="data[pages][{id}][perms_group]" value="{pageInfo.perms_group}" />
 		<f:form.hidden name="data[pages][{id}][perms_everybody]" value="{pageInfo.perms_everybody}" />
+        <f:for each="{perms_acls}" as="perm_acl">
+            <f:form.hidden name="data[tx_beacl_acl][{perm_acl.uid}][permissions]" value="{perm_acl.permissions}" />
+        </f:for>
 		<f:form.hidden name="depth" value="{depth}" />
 		<f:form.hidden name="redirect" value="{f:uri.action(action: 'index', arguments: {lastEdited: id, id: returnId})}" />
-
+		<input type="hidden" name="pageID" value="{pageInfo.uid}" />
 	</f:form>
 
 	<hr>
@@ -105,6 +160,9 @@
 			Permissions.setCheck("check[perms_user]", "tx_beuser_system_beusertxpermission[data][pages][{id}][perms_user]");
 			Permissions.setCheck("check[perms_group]", "tx_beuser_system_beusertxpermission[data][pages][{id}][perms_group]");
 			Permissions.setCheck("check[perms_everybody]", "tx_beuser_system_beusertxpermission[data][pages][{id}][perms_everybody]");
+            <f:for each="{perms_acls}" as="perm_acl">
+               Permissions.setCheck("check[perms_acl_{perm_acl.uid}]", "tx_beuser_system_beusertxpermission[data][tx_beacl_acl][{perm_acl.uid}][permissions]");
+            </f:for>
 		});
 	</script>
 

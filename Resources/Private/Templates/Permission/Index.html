@@ -5,7 +5,7 @@
 <f:layout name="Permission" />
 
 <f:section name="headline">
-	<h1><f:translate key="LLL:EXT:beuser/Resources/Private/Language/locallang_mod_permission.xlf:permissions" />TOMMY</h1>
+	<h1><f:translate key="LLL:EXT:beuser/Resources/Private/Language/locallang_mod_permission.xlf:permissions" /> ACL</h1>
 </f:section>
 
 <f:section name="content">
@@ -13,6 +13,15 @@
 	<div class="form-group">
 		<label for="depth"><f:translate key="LLL:EXT:beuser/Resources/Private/Language/locallang_mod_permission.xlf:Depth" />:</label>
 		<f:form.select class="form-control" id="depth" value="{depth}" options="{depthOptions}" additionalAttributes="{onchange: 'jumpToUrl(\'{depthBaseUrl}\'.replace(\'__DEPTH__\', this.options[this.selectedIndex].value), this);'}" />
+	</div>
+
+	<div class="form-group">
+		<label for="depth"><f:translate key="LLL:EXT:be_acl/Resources/Private/Language/locallang_db.xml:tx_beacl_acl.type.I.1" />:</label>
+		<f:form.select name="tx_beacl_objsel[1]" optionValueField="uid" optionLabelField="title" size="5" multiple="1" class="form-control" id="tx_beacl_objsel" options="{beGroups}" />
+	</div>
+
+	<div class="form-group">
+		<f:form.submit onclick="jumpToUrl('{depthBaseUrl}'.replace('__GROUPS__', TYPO3.jQuery('#tx_beacl_objsel').val()), this);" value="{f:translate(key: 'LLL:EXT:be_acl/res/locallang_perm.xml:aclObjSelUpdate')}" />
 	</div>
 
 	<div class="panel panel-default panel-space">
@@ -25,6 +34,12 @@
 					<th align="center"><f:translate key="LLL:EXT:beuser/Resources/Private/Language/locallang_mod_permission.xlf:Group" /></th>
 					<th align="center"><f:translate key="LLL:EXT:beuser/Resources/Private/Language/locallang_mod_permission.xlf:Everybody" /></th>
 					<th align="center"><f:translate key="LLL:EXT:beuser/Resources/Private/Language/locallang_mod_permission.xlf:EditLock" /></th>
+					<f:if condition="{beGroups}">
+						<th align="center"><f:translate key="LLL:EXT:beuser/Resources/Private/Language/locallang_mod_permission.xlf:Group" /></th>
+					</f:if>
+					<f:for each="{beGroups}" as="beGroup">
+						<th align="center">{beGroup.title}</th>
+					</f:for>
 				</tr>
 				</thead>
 				<f:for each="{viewTree}" as="data">
@@ -114,6 +129,14 @@
 										</f:if>
 									</span>
 								</td>
+								<f:if condition="{beGroups}">
+									<td nowrap="nowrap">{data.row.perms_groupid}</td>
+									<f:for each="{beGroups}" as="beGroup">
+										<td nowrap="nowrap">
+											<bu:permissions permission="{data.row.perms_group}" scope="group" pageId="{data.row.uid}" />
+										</td>
+									</f:for>
+								</f:if>
 							</f:then>
 
 							<f:else>

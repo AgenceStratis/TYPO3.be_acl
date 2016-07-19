@@ -24,7 +24,7 @@ function createNewHiddenField (name, value) {
 function deleteACL (id) {
 	if(isNaN(id)) {
 			// delete ACL by removing it from the DOM tree
-		var deleteLine = document.getElementsByName('data[tx_beacl_acl][' + id + '][type]')[0].parentNode.parentNode;
+		var deleteLine = document.getElementsByName('tx_beuser_system_beusertxpermission[data][tx_beacl_acl][' + id + '][type]')[0].parentNode.parentNode;
 		document.getElementsByName('data[tx_beacl_acl][' + id + '][type]')[0].parentNode.parentNode.parentNode.removeChild(deleteLine);
 		var deleteLine2 = document.getElementsByName('data[tx_beacl_acl][' + id + '][permissions]')[0];
 		document.getElementsByName('data[tx_beacl_acl][' + id + '][permissions]')[0].parentNode.removeChild(deleteLine2);
@@ -56,13 +56,13 @@ function updateUserGroup (ACLid,selectedEntry) {
 	// get child nodes of user/group selector
 	if(typeSelector.value == 0) {
 		// USER
-		var childNodes = document.getElementsByName('data[pages]['+pageID+'][perms_userid]')[0].childNodes;
+		var childNodes = document.getElementsByName('tx_beuser_system_beusertxpermission[data][pages]['+pageID+'][perms_userid]')[0].childNodes;
 	} else {
-		var childNodes = document.getElementsByName('data[pages]['+pageID+'][perms_groupid]')[0].childNodes;
+		var childNodes = document.getElementsByName('tx_beuser_system_beusertxpermission[data][pages]['+pageID+'][perms_groupid]')[0].childNodes;
 	}
 
 	// delete current nodes
-	var objId = document.getElementsByName('data[tx_beacl_acl][' + ACLid + '][object_id]')[0];
+	var objId = document.getElementsByName('tx_beuser_system_beusertxpermission[data][tx_beacl_acl][' + ACLid + '][object_id]')[0];
 	var length = objId.childNodes.length;
 	for(var i=0; i < length;i++) {
 		objId.removeChild(objId.firstChild);
@@ -71,11 +71,11 @@ function updateUserGroup (ACLid,selectedEntry) {
 	// set new nodes
 	for(var i=0;i<childNodes.length;i++) {
 		var tmp = childNodes[i].cloneNode(true);
-		document.getElementsByName('data[tx_beacl_acl][' + ACLid + '][object_id]')[0].appendChild(tmp);
+		document.getElementsByName('tx_beuser_system_beusertxpermission[data][tx_beacl_acl][' + ACLid + '][object_id]')[0].appendChild(tmp);
 	}
 
 	if(arguments.length == 2) {
-		document.getElementsByName('data[tx_beacl_acl][' + ACLid + '][object_id]')[0].value = selectedEntry;
+		document.getElementsByName('tx_beuser_system_beusertxpermission[data][tx_beacl_acl][' + ACLid + '][object_id]')[0].value = selectedEntry;
 	}
 }
 
@@ -122,8 +122,8 @@ function addACL () {
 
 		// first table cell with selectors
 	tableCells[0] = document.createElement("td");
-	tableCells[0].className = 'bgColor5';
-	tableCells[0].align = 'right';
+	tableCells[0].className = '';
+	tableCells[0].align = '';
 
 	var bIsIE8 = isIE8();
 	
@@ -147,10 +147,10 @@ function addACL () {
 			variousObjects[1].appendChild(variousObjects[12]);
 
 		if (bIsIE8)	{
-			variousObjects[2] = document.createElement('<select name="data[tx_beacl_acl][' + ACLid + '][object_id]">');
+			variousObjects[2] = document.createElement('<select name="tx_beuser_system_beusertxpermission[data][tx_beacl_acl][' + ACLid + '][object_id]">');
 		} else {
 			variousObjects[2] = document.createElement('select');
-			variousObjects[2].setAttribute("name", 'data[tx_beacl_acl][' + ACLid + '][object_id]');
+			variousObjects[2].setAttribute("name", 'tx_beuser_system_beusertxpermission[data][tx_beacl_acl][' + ACLid + '][object_id]');
 		}
 	tableCells[0].appendChild(variousObjects[1]);
 	tableCells[0].appendChild(variousObjects[2]);
@@ -170,10 +170,10 @@ function addACL () {
 
 			case 6:
 				if (bIsIE8)	{
-					selectorBoxes[i-1] = document.createElement('<input name="data[tx_beacl_acl][' +  ACLid + '][recursive]">');
+					selectorBoxes[i-1] = document.createElement('<input name="tx_beuser_system_beusertxpermission[data][tx_beacl_acl][' +  ACLid + '][recursive]">');
 				} else {
 					selectorBoxes[i-1] = document.createElement('input');
-					selectorBoxes[i-1].setAttribute("name", 'data[tx_beacl_acl][' +  ACLid + '][recursive]');
+					selectorBoxes[i-1].setAttribute("name", 'tx_beuser_system_beusertxpermission[data][tx_beacl_acl][' +  ACLid + '][recursive]');
 				}
 				selectorBoxes[i-1].setAttribute("type", 'checkbox');
 				selectorBoxes[i-1].value = 1;
