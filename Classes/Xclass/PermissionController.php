@@ -27,9 +27,11 @@ namespace KayStrobach\BeAcl\Xclass;
 use TYPO3\CMS\Backend\Tree\View\PageTreeView;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Backend\Utility\IconUtility;
+use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -240,6 +242,7 @@ class PermissionController extends \TYPO3\CMS\Beuser\Controller\PermissionContro
      */
     protected function updateAction(array $data, array $mirror)
     {
+        global $BE_USER;
         if (!empty($data['pages'])) {
             foreach ($data['pages'] as $pageUid => $properties) {
                 // if the owner and group field shouldn't be touched, unset the option
@@ -285,6 +288,32 @@ class PermissionController extends \TYPO3\CMS\Beuser\Controller\PermissionContro
                     );
                 }
             }
+        }
+        $cmd = GeneralUtility::_GP('cmd');
+
+        if ($cmd) {
+            $beUser = $BE_USER;
+            $tce = GeneralUtility::makeInstance(DataHandler::class);
+            $tce->stripslashes_values = 0;
+            // Configuring based on user prefs.
+            if ($beUser->uc['recursiveDelete']) {
+                // TRUE if the delete Recursive flag is set.
+                $tce->deleteTree = 1;
+            }
+            if ($beUser->uc['copyLevels']) {
+                // Set to number of page-levels to copy.
+                $tce->copyTree = MathUtility::forceIntegerInRange($beUser->uc['copyLevels'], 0, 100);
+            }
+            if ($beUser->uc['neverHideAtCopy']) {
+                $tce->neverHideAtCopy = 1;
+            }
+            $TCAdefaultOverride = $beUser->getTSConfigProp('TCAdefaults');
+            if (is_array($TCAdefaultOverride)) {
+                $tce->setDefaultsFromUserTS($TCAdefaultOverride);
+            }
+
+            $tce->start(null, $cmd);
+            $tce->process_cmdmap();
         }
         $this->redirect('index', null, null, array('id' => $this->returnId, 'depth' => $this->depth));
     }
