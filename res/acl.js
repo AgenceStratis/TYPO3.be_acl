@@ -39,7 +39,7 @@ function deleteACL (id) {
 		hiddenDeleteCMDmap.setAttribute('value', 1);
 		hiddenFields.appendChild(hiddenDeleteCMDmap);
 
-		//document.editform.submit();
+		document.editform.submit();
 	}
 }
 

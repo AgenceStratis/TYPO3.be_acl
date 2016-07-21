@@ -116,7 +116,7 @@
                                         <input type="checkbox" name="data[tx_beacl_acl][{perm_acl.uid}][recursive]" value="1" {f:if(condition: '{perm_acl.recursive}', then: 'checked', else: '')} />
                                     </td>
                                     <td>
-                                        <a href="javascript:deleteACL(1)"><core:icon identifier="actions-delete" /> {f:translate(key: 'LLL:EXT:be_acl/res/locallang_perm.xml:deleteAcl')}</a>
+                                        <a href="javascript:deleteACL({perm_acl.uid})"><core:icon identifier="actions-delete" /> {f:translate(key: 'LLL:EXT:be_acl/res/locallang_perm.xml:deleteAcl')}</a>
                                     </td>
                                 </tr>
                             </f:for>
