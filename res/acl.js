@@ -25,11 +25,11 @@ function deleteACL (id) {
 	if(isNaN(id)) {
 			// delete ACL by removing it from the DOM tree
 		var deleteLine = document.getElementsByName('tx_beuser_system_beusertxpermission[data][tx_beacl_acl][' + id + '][type]')[0].parentNode.parentNode;
-		document.getElementsByName('data[tx_beacl_acl][' + id + '][type]')[0].parentNode.parentNode.parentNode.removeChild(deleteLine);
-		var deleteLine2 = document.getElementsByName('data[tx_beacl_acl][' + id + '][permissions]')[0];
-		document.getElementsByName('data[tx_beacl_acl][' + id + '][permissions]')[0].parentNode.removeChild(deleteLine2);
-		var deleteLine3 = document.getElementsByName('data[tx_beacl_acl][' + id + '][pid]')[0];
-		document.getElementsByName('data[tx_beacl_acl][' + id + '][pid]')[0].parentNode.removeChild(deleteLine3);
+		document.getElementsByName('tx_beuser_system_beusertxpermission[data][tx_beacl_acl][' + id + '][type]')[0].parentNode.parentNode.parentNode.removeChild(deleteLine);
+		var deleteLine2 = document.getElementsByName('tx_beuser_system_beusertxpermission[data][tx_beacl_acl][' + id + '][permissions]')[0];
+		document.getElementsByName('tx_beuser_system_beusertxpermission[data][tx_beacl_acl][' + id + '][permissions]')[0].parentNode.removeChild(deleteLine2);
+		var deleteLine3 = document.getElementsByName('tx_beuser_system_beusertxpermission[data][tx_beacl_acl][' + id + '][pid]')[0];
+		document.getElementsByName('tx_beuser_system_beusertxpermission[data][tx_beacl_acl][' + id + '][pid]')[0].parentNode.removeChild(deleteLine3);
 	} else {
 			// delete by filling the cmdMap
 		var hiddenFields = document.getElementById('insertHiddenFields');
@@ -39,7 +39,7 @@ function deleteACL (id) {
 		hiddenDeleteCMDmap.setAttribute('value', 1);
 		hiddenFields.appendChild(hiddenDeleteCMDmap);
 
-		document.editform.submit.click();
+		//document.editform.submit();
 	}
 }
 
@@ -51,7 +51,7 @@ function deleteACL (id) {
  */
 function updateUserGroup (ACLid,selectedEntry) {
 	var pageID = document.getElementsByName('pageID')[0].value;
-	var typeSelector = document.getElementsByName('data[tx_beacl_acl][' + ACLid + '][type]')[0];
+	var typeSelector = document.getElementsByName('tx_beuser_system_beusertxpermission[data][tx_beacl_acl][' + ACLid + '][type]')[0];
 
 	// get child nodes of user/group selector
 	if(typeSelector.value == 0) {
@@ -128,10 +128,10 @@ function addACL () {
 	var bIsIE8 = isIE8();
 	
 		if (bIsIE8) {
-  			variousObjects[1] = document.createElement('<select name="data[tx_beacl_acl][' + ACLid + '][type]">');
+  			variousObjects[1] = document.createElement('<select name="tx_beuser_system_beusertxpermission[data][tx_beacl_acl][' + ACLid + '][type]">');
 		} else {
 			variousObjects[1] = document.createElement('select');
-			variousObjects[1].setAttribute("name", 'data[tx_beacl_acl][' + ACLid + '][type]');
+			variousObjects[1].setAttribute("name", 'tx_beuser_system_beusertxpermission[data][tx_beacl_acl][' + ACLid + '][type]');
 		}
 		variousObjects[1].onchange = function() { updateUserGroup(ACLid) };
 
@@ -188,7 +188,7 @@ function addACL () {
 				selectorBoxes[i-1].setAttribute("name", 'check[perms_acl_' +  ACLid + ']['+id+']');
 			}
 			selectorBoxes[i-1].setAttribute("type", 'checkbox');
-			selectorBoxes[i-1].onclick = function() { checkChange('check[perms_acl_'+ACLid+']', 'data[tx_beacl_acl]['+ACLid+'][permissions]') };
+			selectorBoxes[i-1].onclick = function() { TYPO3.Permissions.checkChange('check[perms_acl_'+ACLid+']', 'tx_beuser_system_beusertxpermission[data][tx_beacl_acl]['+ACLid+'][permissions]') };
 			tableCells[i].appendChild(selectorBoxes[i-1]);
 		}
 		tableRow.appendChild(tableCells[i]);
@@ -212,10 +212,10 @@ function addACL () {
 		// hidden fields
 	var hiddenFields = document.getElementById('insertHiddenFields');
 	if (bIsIE8)	{
-		var hiddenACLstore = document.createElement('<input name="data[tx_beacl_acl][' + ACLid + '][permissions]">');
+		var hiddenACLstore = document.createElement('<input name="tx_beuser_system_beusertxpermission[data][tx_beacl_acl][' + ACLid + '][permissions]">');
 	} else {
 		var hiddenACLstore = document.createElement('input');
-		hiddenACLstore.name = 'data[tx_beacl_acl][' + ACLid + '][permissions]';
+		hiddenACLstore.name = 'tx_beuser_system_beusertxpermission[data][tx_beacl_acl][' + ACLid + '][permissions]';
 	}
 	hiddenACLstore.setAttribute('type', 'hidden');
 	hiddenACLstore.setAttribute('value', 0);
@@ -223,10 +223,10 @@ function addACL () {
 	hiddenFields.appendChild(hiddenACLstore);
 
 	if (bIsIE8)	{
-		var hiddenPIDstore = document.createElement('<input name="data[tx_beacl_acl][' + ACLid + '][pid]">');
+		var hiddenPIDstore = document.createElement('<input name="tx_beuser_system_beusertxpermission[data][tx_beacl_acl][' + ACLid + '][pid]">');
 	} else {
 		var hiddenPIDstore = document.createElement('input');
-		hiddenPIDstore.setAttribute('name', 'data[tx_beacl_acl][' + ACLid + '][pid]');
+		hiddenPIDstore.setAttribute('name', 'tx_beuser_system_beusertxpermission[data][tx_beacl_acl][' + ACLid + '][pid]');
 	}
 	hiddenPIDstore.setAttribute('type', 'hidden');
 	hiddenPIDstore.setAttribute('value', document.getElementsByName('pageID')[0].value);

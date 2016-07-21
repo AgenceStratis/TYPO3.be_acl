@@ -96,7 +96,6 @@ class PermissionController extends \TYPO3\CMS\Beuser\Controller\PermissionContro
         // Get list of ACL users and groups, and initialize ACLs
         $aclUsers = $this->acl_objectSelector(0, $beAclConfig);
         $aclGroups = $this->acl_objectSelector(1, $beAclConfig);
-
         $this->buildACLtree($aclUsers, $aclGroups);
 
         if (!$this->id) {
@@ -130,6 +129,16 @@ class PermissionController extends \TYPO3\CMS\Beuser\Controller\PermissionContro
         $beUserArray = BackendUtility::getUserNames();
         $this->view->assign('beUsers', $beUserArray);
         $beGroupArray = BackendUtility::getGroupNames();
+        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_beacl_acl', 'type=1');
+        while ($result = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+            foreach($beGroupArray as $key => $beGroup) {
+                $beGroupArray[$key]['pageId'] = $result['object_id'];
+                $beGroupArray[$key]['scope'] = 'group';
+                if ($result['object_id'] == $beGroup['uid']) {
+                    $beGroupArray[$key]['permission'] = $result['permissions'];
+                }
+            }
+        }
         $this->view->assign('beGroups', $beGroupArray);
 
         /** @var $tree PageTreeView */
@@ -152,6 +161,7 @@ class PermissionController extends \TYPO3\CMS\Beuser\Controller\PermissionContro
         } else {
             $tree->tree[] = array('row' => $this->pageInfo, 'HTML' => $tree->getRootIcon($this->pageInfo));
         }
+
         $tree->getTree($this->id, $this->depth);
         $this->view->assign('viewTree', $tree->tree);
 
@@ -256,6 +266,26 @@ class PermissionController extends \TYPO3\CMS\Beuser\Controller\PermissionContro
                 }
             }
         }
+        if (!empty($data['tx_beacl_acl'])) {
+            foreach($data['tx_beacl_acl'] as $aclUid => $properties) {
+                if (substr($aclUid, 0, 3) === 'NEW') {
+                    $now = time();
+                    $properties['crdate'] = $now;
+                    $properties['tstamp'] = $now;
+                    $properties['cruser_id'] = intval($GLOBALS['BE_USER']->user['uid']);
+                    $this->getDatabaseConnection()->exec_INSERTquery(
+                        'tx_beacl_acl',
+                        $properties
+                    );
+                } else {
+                    $this->getDatabaseConnection()->exec_UPDATEquery(
+                        'tx_beacl_acl',
+                        'uid = ' . (int)$aclUid,
+                        $properties
+                    );
+                }
+            }
+        }
         $this->redirect('index', null, null, array('id' => $this->returnId, 'depth' => $this->depth));
     }
 
@@ -279,6 +309,7 @@ class PermissionController extends \TYPO3\CMS\Beuser\Controller\PermissionContro
         while ($result = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
             $aclObjects[] = $result['object_id'];
         }
+
         $aclObjects = array_unique($aclObjects);
         // advanced selector disabled
         if (!$conf['enableFilterSelector']) {
@@ -299,7 +330,9 @@ class PermissionController extends \TYPO3\CMS\Beuser\Controller\PermissionContro
             }
 
             // get current selection from UC, merge data, write it back to UC
-            $currentSelection = is_array($BE_USER->uc['moduleData']['txbeacl_aclSelector'][$type]) ? $BE_USER->uc['moduleData']['txbeacl_aclSelector'][$type] : array();
+            $currentSelection = is_array($BE_USER->uc['moduleData']['txbeacl_aclSelector'][$type])
+                && !empty($BE_USER->uc['moduleData']['txbeacl_aclSelector'][$type])
+                ? $BE_USER->uc['moduleData']['txbeacl_aclSelector'][$type] : array();
 
             $currentSelection = GeneralUtility::_GP('tx_beacl_objsel') !== null ? GeneralUtility::_GP('tx_beacl_objsel') : $currentSelection;
 

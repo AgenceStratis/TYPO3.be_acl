@@ -96,8 +96,15 @@
                             <f:for each="{perms_acls}" as="perm_acl">
                                 <tr>
                                     <td>
-                                        <f:form.select name="data[tx_beacl_acl][{perm_acl.uid}][type]" options="{0: 'User', 1: 'Group'}" value="1" />
-                                        <f:form.select name="data[tx_beacl_acl][{perm_acl.uid}][object_id]" options="{beGroupData}" value="{currentBeGroup}" />
+                                        <f:form.select name="data[tx_beacl_acl][{perm_acl.uid}][type]" options="{0: 'User', 1: 'Group'}" value="{perm_acl.type}" />
+										<f:if condition="{perm_acl.type}">
+											<f:then>
+												<f:form.select name="data[tx_beacl_acl][{perm_acl.uid}][object_id]" options="{beGroupData}" value="{perm_acl.object_id}" />
+											</f:then>
+											<f:else>
+												<f:form.select name="data[tx_beacl_acl][{perm_acl.uid}][object_id]" options="{beUserData}" value="{perm_acl.object_id}" />
+											</f:else>
+										</f:if>
                                     </td>
                                     <td><input type="checkbox" name="check[perms_acl_{perm_acl.uid}][1]" onclick="TYPO3.Permissions.checkChange('check[perms_acl_{perm_acl.uid}]', 'tx_beuser_system_beusertxpermission[data][tx_beacl_acl][{perm_acl.uid}][permissions]')" /></td>
                                     <td><input type="checkbox" name="check[perms_acl_{perm_acl.uid}][5]" onclick="TYPO3.Permissions.checkChange('check[perms_acl_{perm_acl.uid}]', 'tx_beuser_system_beusertxpermission[data][tx_beacl_acl][{perm_acl.uid}][permissions]')" /></td>

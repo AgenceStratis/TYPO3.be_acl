@@ -19,7 +19,7 @@ class AclLabelUserFunc
 
 		if($item['type']== '0') {
 			$label .= $GLOBALS['LANG']->sL('LLL:EXT:be_acl/Resources/Private/Language/locallang_db.xml:tx_beacl_acl.type.I.0');
-			$label .= $this->getLabel($params['object_id'], 'be_users', 'username');
+			$label .= $this->getLabel($item['object_id'], 'be_users', 'username');
 		} else {
 			$label .= $GLOBALS['LANG']->sL('LLL:EXT:be_acl/Resources/Private/Language/locallang_db.xml:tx_beacl_acl.type.I.1');
 			$label .= $this->getLabel($item['object_id'], 'be_groups', 'title');

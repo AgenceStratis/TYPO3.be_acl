@@ -1,6 +1,7 @@
 {namespace be = TYPO3\CMS\Backend\ViewHelpers}
 {namespace bu = TYPO3\CMS\Beuser\ViewHelpers}
 {namespace core = TYPO3\CMS\Core\ViewHelpers}
+{namespace ba = KayStrobach\BeAcl\ViewHelpers}
 
 <f:layout name="Permission" />
 
@@ -13,6 +14,15 @@
 	<div class="form-group">
 		<label for="depth"><f:translate key="LLL:EXT:beuser/Resources/Private/Language/locallang_mod_permission.xlf:Depth" />:</label>
 		<f:form.select class="form-control" id="depth" value="{depth}" options="{depthOptions}" additionalAttributes="{onchange: 'jumpToUrl(\'{depthBaseUrl}\'.replace(\'__DEPTH__\', this.options[this.selectedIndex].value), this);'}" />
+	</div>
+
+	<div class="form-group">
+		<label for="depth"><f:translate key="LLL:EXT:be_acl/Resources/Private/Language/locallang_db.xml:tx_beacl_acl.type.I.0" />:</label>
+		<f:form.select name="tx_beacl_objsel[0]" optionValueField="uid" optionLabelField="username" size="5" multiple="1" class="form-control" id="tx_beacl_objsel_user" options="{beUsers}" />
+	</div>
+
+	<div class="form-group">
+		<f:form.submit onclick="jumpToUrl('{depthBaseUrl}'.replace('__GROUPS__', TYPO3.jQuery('#tx_beacl_objsel').val()), this);" value="{f:translate(key: 'LLL:EXT:be_acl/res/locallang_perm.xml:aclObjSelUpdate')}" />
 	</div>
 
 	<div class="form-group">
@@ -133,7 +143,7 @@
 									<td nowrap="nowrap">{data.row.perms_groupid}</td>
 									<f:for each="{beGroups}" as="beGroup">
 										<td nowrap="nowrap">
-											<bu:permissions permission="{data.row.perms_group}" scope="group" pageId="{data.row.uid}" />
+											<ba:permissions permission="{beGroup.permission}" scope="{beGroup.scope}" pageId="{beGroup.pageId}" />
 										</td>
 									</f:for>
 								</f:if>
