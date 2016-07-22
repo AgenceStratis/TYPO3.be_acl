@@ -27,7 +27,7 @@
 
 	<div class="form-group">
 		<label for="depth"><f:translate key="LLL:EXT:be_acl/Resources/Private/Language/locallang_db.xml:tx_beacl_acl.type.I.1" />:</label>
-		<f:form.select name="tx_beacl_objsel[1]" optionValueField="uid" optionLabelField="title" size="5" multiple="1" class="form-control" id="tx_beacl_objsel" options="{beGroups}" />
+		<f:form.select name="tx_beacl_objsel[1]" optionValueField="uid" optionLabelField="title" size="5" multiple="1" class="form-control" id="tx_beacl_objsel" options="{beGroups}" value="{aclGroupsTreeArray}" />
 	</div>
 
 	<div class="form-group">
@@ -44,10 +44,10 @@
 					<th align="center"><f:translate key="LLL:EXT:beuser/Resources/Private/Language/locallang_mod_permission.xlf:Group" /></th>
 					<th align="center"><f:translate key="LLL:EXT:beuser/Resources/Private/Language/locallang_mod_permission.xlf:Everybody" /></th>
 					<th align="center"><f:translate key="LLL:EXT:beuser/Resources/Private/Language/locallang_mod_permission.xlf:EditLock" /></th>
-					<f:if condition="{beGroups}">
+					<f:if condition="{beGroupsAcl}">
 						<th align="center"><f:translate key="LLL:EXT:beuser/Resources/Private/Language/locallang_mod_permission.xlf:Group" /></th>
 					</f:if>
-					<f:for each="{beGroups}" as="beGroup">
+					<f:for each="{beGroupsAcl}" as="beGroup">
 						<th align="center">{beGroup.title}</th>
 					</f:for>
 				</tr>
@@ -139,9 +139,9 @@
 										</f:if>
 									</span>
 								</td>
-								<f:if condition="{beGroups}">
+								<f:if condition="{beGroupsAcl}">
 									<td nowrap="nowrap">{data.row.perms_groupid}</td>
-									<f:for each="{beGroups}" as="beGroup">
+									<f:for each="{beGroupsAcl}" as="beGroup">
 										<td nowrap="nowrap">
 											<ba:permissions permission="{beGroup.permission}" scope="{beGroup.scope}" pageId="{beGroup.pageId}" />
 										</td>

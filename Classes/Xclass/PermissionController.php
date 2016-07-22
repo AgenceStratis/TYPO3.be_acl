@@ -97,8 +97,19 @@ class PermissionController extends \TYPO3\CMS\Beuser\Controller\PermissionContro
         }
         // Get list of ACL users and groups, and initialize ACLs
         $aclUsers = $this->acl_objectSelector(0, $beAclConfig);
+        $aclUsersArray = GeneralUtility::trimExplode(',', $aclGroups);
+        $aclUsersTreeArray = array();
+        foreach($aclUsersArray as $beUser) {
+            $aclUsersTreeArray[$beUser] = $beUser;
+        }
         $aclGroups = $this->acl_objectSelector(1, $beAclConfig);
-        $this->buildACLtree($aclUsers, $aclGroups);
+        $aclGroupsArray = GeneralUtility::trimExplode(',', $aclGroups);
+        $aclGroupsTreeArray = array();
+        foreach($aclGroupsArray as $beGroup) {
+            $aclGroupsTreeArray[$beGroup] = $beGroup;
+        }
+
+        $this->buildACLtree($aclUsersTreeArray, $aclGroupsTreeArray);
 
         if (!$this->id) {
             $this->pageInfo = array('title' => '[root-level]', 'uid' => 0, 'pid' => 0);
@@ -118,7 +129,7 @@ class PermissionController extends \TYPO3\CMS\Beuser\Controller\PermissionContro
         $url = $this->uriBuilder->reset()->setArguments(array(
             'action' => 'index',
             'depth' => '__DEPTH__',
-            'tx_beacl_objsel' => '__GROUPS__',
+            'tx_beacl_objsel[1]' => '__GROUPS__',
             'id' => $this->id
         ))->buildBackendUri();
         foreach (array(1, 2, 3, 4, 10) as $depthLevel) {
@@ -142,6 +153,14 @@ class PermissionController extends \TYPO3\CMS\Beuser\Controller\PermissionContro
             }
         }
         $this->view->assign('beGroups', $beGroupArray);
+        $this->view->assign('aclGroupsTreeArray', $aclGroupsTreeArray);
+        $beGroupsAcl = array();
+        foreach($beGroupArray as $beGroup) {
+            if (in_array($beGroup['uid'], $aclGroupsTreeArray)) {
+                $beGroupsAcl[] = $beGroup;
+            }
+        }
+        $this->view->assign('beGroupsAcl', $beGroupsAcl);
 
         /** @var $tree PageTreeView */
         $tree = GeneralUtility::makeInstance(PageTreeView::class);
@@ -359,14 +378,14 @@ class PermissionController extends \TYPO3\CMS\Beuser\Controller\PermissionContro
             }
 
             // get current selection from UC, merge data, write it back to UC
-            $currentSelection = is_array($BE_USER->uc['moduleData']['txbeacl_aclSelector'][$type])
-                && !empty($BE_USER->uc['moduleData']['txbeacl_aclSelector'][$type])
-                ? $BE_USER->uc['moduleData']['txbeacl_aclSelector'][$type] : array();
-
-            $currentSelection = GeneralUtility::_GP('tx_beacl_objsel') !== null ? GeneralUtility::_GP('tx_beacl_objsel') : $currentSelection;
-
+            $currentSelection = isset($BE_USER->uc['moduleData']['txbeacl_aclSelector'][$type]) ? $BE_USER->uc['moduleData']['txbeacl_aclSelector'][$type] : array();
+            $currentSelectionOverride_raw = GeneralUtility::_GP('tx_beacl_objsel');
+            if (isset($currentSelectionOverride_raw[$type])) {
+                $currentSelection = $currentSelectionOverride_raw[$type];
+            }
             $BE_USER->uc['moduleData']['txbeacl_aclSelector'][$type] = $currentSelection;
             $BE_USER->writeUC($BE_USER->uc);
+
             return $currentSelection;
         }
 
