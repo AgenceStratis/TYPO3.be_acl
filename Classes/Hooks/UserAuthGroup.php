@@ -156,8 +156,6 @@ class UserAuthGroup
 			$GLOBALS['BE_USER']->setAndSaveSessionData('be_acl', $cache);
 		}
 
-		debug($str);
-
 		return $str;
 	}
 
