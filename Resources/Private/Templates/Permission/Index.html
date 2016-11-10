@@ -139,13 +139,20 @@
 										</f:if>
 									</span>
 								</td>
-								<f:if condition="{beGroupsAcl}">
+								<f:if condition="{beGroupsAcl.0.pageId} == {data.row.uid}">
+									<f:then>
 									<td nowrap="nowrap">{data.row.perms_groupid}</td>
 									<f:for each="{beGroupsAcl}" as="beGroup">
 										<td nowrap="nowrap">
 											<ba:permissions permission="{beGroup.permission}" scope="{beGroup.scope}" pageId="{beGroup.pageId}" />
 										</td>
 									</f:for>
+									</f:then>
+									<f:else>
+										<td></td>
+										<td></td>
+										<td></td>
+									</f:else>
 								</f:if>
 							</f:then>
 
