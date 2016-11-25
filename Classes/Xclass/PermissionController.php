@@ -97,13 +97,13 @@ class PermissionController extends \TYPO3\CMS\Beuser\Controller\PermissionContro
         }
         // Get list of ACL users and groups, and initialize ACLs
         $aclUsers = $this->acl_objectSelector(0, $beAclConfig);
-        $aclUsersArray = $aclUsers !== null ? GeneralUtility::trimExplode(',', $aclUsers) : array();
+        $aclUsersArray = count($aclUsers) !== 0 ? GeneralUtility::trimExplode(',', $aclUsers) : array();
         $aclUsersTreeArray = array();
         foreach($aclUsersArray as $beUser) {
             $aclUsersTreeArray[$beUser] = $beUser;
         }
         $aclGroups = $this->acl_objectSelector(1, $beAclConfig);
-        $aclGroupsArray = $aclGroups !== null ? GeneralUtility::trimExplode(',', $aclGroups) : array();
+        $aclGroupsArray = count($aclGroups) !== 0 ? GeneralUtility::trimExplode(',', $aclGroups) : array();
         $aclGroupsTreeArray = array();
         foreach($aclGroupsArray as $beGroup) {
             $aclGroupsTreeArray[$beGroup] = $beGroup;
@@ -389,7 +389,7 @@ class PermissionController extends \TYPO3\CMS\Beuser\Controller\PermissionContro
             return $currentSelection;
         }
 
-        return NULL;
+        return array();
     }
 
     /**
